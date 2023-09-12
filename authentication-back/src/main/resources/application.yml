@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    password: user_mysql_14
+    url: jdbc:mysql://localhost:3306/authentication_db
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show_sql: true
