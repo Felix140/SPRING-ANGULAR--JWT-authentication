@@ -7,9 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.auth.jwt.backend.dto.CredentialsDto;
 import com.auth.jwt.backend.dto.UserDto;
+import com.auth.jwt.backend.services.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @RequestMapping
+@RequiredArgsConstructor
 public class AuthController {
+	
+	private final UserService userService;
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto) {
