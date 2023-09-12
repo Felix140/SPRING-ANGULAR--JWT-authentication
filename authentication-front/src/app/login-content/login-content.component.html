@@ -1,1 +1,15 @@
-<p>login-content works!</p>
+<form (ngSubmit)="onSubmitLogin()" class="form-container">
+
+    <div class="mb-3">
+        <label for="loginName" class="form-label">Name</label>
+        <input type="login" class="form-control" id="loginName" name="login" [(ngModel)]="login">
+    </div>
+
+    <div class="mb-3">
+        <label for="loginPassword" class="form-label">Password</label>
+        <input type="password" class="form-control" id="loginPassword" name="password" [(ngModel)]="password">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
