@@ -1,15 +1,79 @@
-<form (ngSubmit)="onSubmitLogin()" class="form-container">
+<div class="row justify-content-center">
+    <div class="col-4">
 
-    <div class="mb-3">
-        <label for="loginName" class="form-label">Name</label>
-        <input type="login" class="form-control" id="loginName" name="login" [(ngModel)]="login">
+        <ul class="nav nav-pills nav justified mb-3" id="ex1" role="tablist">
+
+            <!-- Bottone di login -->
+            <li class="nav-item" role="presentation">
+                <button [ngClass]=" active == 'login' ? 'nav-link active' : 'nav-link' " id="tab-login"
+                    (click)="onLoginTab()"> Login </button>
+            </li>
+
+            <!-- Bottone di registrazione -->
+            <li class="nav-item" role="presentation">
+                <button [ngClass]=" active == 'register' ? 'nav-link active' : 'nav-link' " id="tab-register"
+                    (click)="onRegisterTab()"> Register </button>
+            </li>
+
+        </ul>
+
+        <!-- LOGIN FORM -->
+        <div class="tab-content">
+            <div [ngClass]="active == 'login' ? 'tab-pane fade show active' : 'tab-pane fade'">
+                <form (ngSubmit)="onSubmitLogin()" class="form-container" #loginForm="ngForm">
+
+                    <div class="mb-3">
+                        <label for="loginName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="loginName" name="login" [(ngModel)]="login">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password"
+                            [(ngModel)]="password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div class="tab-content">
+            <div [ngClass]="active == 'register' ? 'tab-pane fade show active' : 'tab-pane fade'">
+                <form (ngSubmit)="onSubmitRegister()" class="form-container" #registerForm="ngForm">
+
+                    <!-- FIRST NAME -->
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" [(ngModel)]="firstName">
+                    </div>
+
+                    <!-- LAST NAME -->
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" [(ngModel)]="lastName">
+                    </div>
+
+                    <!-- LOGIN -->
+                    <div class="mb-3">
+                        <label for="loginName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="loginName" name="login" [(ngModel)]="login">
+                    </div>
+
+                    <!-- REGISTRATION PASSWORD -->
+                    <div class="mb-3">
+                        <label for="regPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="regPassword" name="regPassword"
+                            [(ngModel)]="password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+
+                </form>
+            </div>
+        </div>
+
     </div>
-
-    <div class="mb-3">
-        <label for="loginPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="loginPassword" name="password" [(ngModel)]="password">
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-
-</form>
+</div>
