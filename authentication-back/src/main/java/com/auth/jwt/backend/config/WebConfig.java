@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -37,11 +38,10 @@ public class WebConfig {
 		
 		// Qui setto le REQUEST da accettare		
 		corsConfiguration.setAllowedMethods (Arrays.asList(
-				"GET", 
-				"POST", 
-				"PUT", 
-				"DELETE", 
-				"OPTIONS"));
+				HttpMethod.GET.name(),
+				HttpMethod.POST.name(),
+				HttpMethod.PUT.name(),
+				HttpMethod.DELETE.name()));
 		
 		// Qui setto il tempo in cui il CORS config viene accettato: 30 minuti
 		corsConfiguration.setMaxAge(3600L);

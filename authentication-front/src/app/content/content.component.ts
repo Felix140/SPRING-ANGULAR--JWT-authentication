@@ -25,7 +25,7 @@ export class ContentComponent {
       "POST",
       "/register",
       {
-        firsName: input.firsName,
+        firstName: input.firstName,
         lastName: input.lastName,
         login: input.login,
         password: input.password
