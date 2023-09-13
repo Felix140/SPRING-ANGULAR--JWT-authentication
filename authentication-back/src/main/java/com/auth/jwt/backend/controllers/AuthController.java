@@ -11,6 +11,8 @@ import com.auth.jwt.backend.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.net.URI;
+
 @RequestMapping
 @RequiredArgsConstructor
 public class AuthController {
@@ -22,5 +24,14 @@ public class AuthController {
 		//Chiamo il service del USER
 		UserDto user = userService.login(credentialsDto);
 		return ResponseEntity.ok(user);
+	}
+
+	//? Qui creo una nuova DTO = SignUpDto
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
+		//Chiamo il service del USER
+		UserDto user = userService.register(signUpDto);
+		//Ritorno un response di tipo CREATED che contiene l'URL dell'ENTITY + il BODY
+		return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
 	}
 }
