@@ -1,4 +1,7 @@
 <div>
-    <!-- (onSubmitLoginEvent) messo in @Output da figlio LOGIN-CONTENT -->
-    <app-login-content (onSubmitLoginEvent)="onLogin($event)"></app-login-content>
+    <!-- (onSubmitLoginEvent) e (onSubmitRegisterEvent) messo in @Output da figlio LOGIN-CONTENT -->
+    <app-login-content
+    (onSubmitLoginEvent)="onLogin($event)"
+    (onSubmitRegisterEvent)="onRegister($event)"
+    ></app-login-content>
 </div>
