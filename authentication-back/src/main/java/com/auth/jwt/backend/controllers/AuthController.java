@@ -1,5 +1,6 @@
 package com.auth.jwt.backend.controllers;
 
+import com.auth.jwt.backend.dto.SignUpDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
