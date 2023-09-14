@@ -35,9 +35,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             try { //* Valida il token, che corrisponderà ad authElements[1]
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(userAuthProvider.validateToken(authElements[1]));
+                if("GET".equals(request.getMethod())) {
+
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(userAuthProvider.validateToken(authElements[1]));
+
+                } else { //* se NON è GET, si fa un controllo rafforzato
+
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(userAuthProvider.validateTokenStrongly(authElements[1]));
+
+                }
 
             } catch (RuntimeException e) {
 
