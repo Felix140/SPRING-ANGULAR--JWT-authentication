@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 //? Qui si configura SPRING SECURITY
 @RequiredArgsConstructor
@@ -17,12 +18,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final UserAuthProvider userAuthProvider;
+
     //* Creo la SECURITY FILTER CHAIN
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecure) throws Exception {
 
         //?Disabilito il CSRF
         httpSecure.csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
                 .sessionManagement(costumizer -> costumizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //* qui indico di trovarmi in una STATELESS APP
                 .authorizeHttpRequests((requests)->requests.requestMatchers(HttpMethod.POST, "/login", "/register").permitAll() //* rendo pubblico l'endpoint "/login
                         .anyRequest().authenticated() //* Tutti gli altri endpoint sono protetti da Autenticazione
