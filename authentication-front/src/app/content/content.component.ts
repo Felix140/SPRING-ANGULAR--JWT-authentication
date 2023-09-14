@@ -20,7 +20,10 @@ export class ContentComponent {
         login: input.login,
         password: input.password
       }
-    );
+    ).then(res => {
+      this.axiosService.setAuthToken(res.data.token);
+      this.showComponent = "messages";
+    });
   }
   onRegister(input: any): void {
     this.axiosService.request(
@@ -32,9 +35,11 @@ export class ContentComponent {
         login: input.login,
         password: input.password
       }
-    );
+    ).then(res => {
+      this.axiosService.setAuthToken(res.data.token);
+      this.showComponent = "messages";
+    });
   }
-
 
   OnShowComponent(showComponent: string) {
     this.showComponent = showComponent;
