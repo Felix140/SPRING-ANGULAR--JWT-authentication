@@ -11,10 +11,11 @@ import com.auth.jwt.backend.dto.UserDto;
 import com.auth.jwt.backend.services.UserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-@RequestMapping
+@RestController //! Se non si mette questa annotation appare ERRORE 403 nel FE
 @RequiredArgsConstructor
 public class AuthController {
 	

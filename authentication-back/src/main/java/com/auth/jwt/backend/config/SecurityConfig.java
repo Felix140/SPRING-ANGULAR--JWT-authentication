@@ -24,7 +24,7 @@ public class SecurityConfig {
         //?Disabilito il CSRF
         httpSecure.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(costumizer -> costumizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //* qui indico di trovarmi in una STATELESS APP
-                .authorizeHttpRequests((requests)->requests.requestMatchers(HttpMethod.POST, "/login").permitAll() //* rendo pubblico l'endpoint "/login
+                .authorizeHttpRequests((requests)->requests.requestMatchers(HttpMethod.POST, "/login", "/register").permitAll() //* rendo pubblico l'endpoint "/login
                         .anyRequest().authenticated() //* Tutti gli altri endpoint sono protetti da Autenticazione
                 );
 
