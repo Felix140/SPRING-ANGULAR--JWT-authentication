@@ -1,7 +1,13 @@
 <div>
+    <app-buttons (loginEvent)="OnShowComponent('login')" (logoutEvent)="OnShowComponent('welcome')"></app-buttons>
+
+    <app-welcome-content *ngIf="showComponent === 'welcome'"></app-welcome-content>
+
     <!-- (onSubmitLoginEvent) e (onSubmitRegisterEvent) messo in @Output da figlio LOGIN-CONTENT -->
-    <app-login-content
+    <app-login-content *ngIf="showComponent === 'login'"
     (onSubmitLoginEvent)="onLogin($event)"
     (onSubmitRegisterEvent)="onRegister($event)"
     ></app-login-content>
+
+    <app-auth-content *ngIf="showComponent === 'messages'"></app-auth-content>
 </div>

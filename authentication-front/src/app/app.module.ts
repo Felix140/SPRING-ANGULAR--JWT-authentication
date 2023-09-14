@@ -9,6 +9,7 @@ import { ContentComponent } from './content/content.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginContentComponent } from './login-content/login-content.component';
 import { WelcomeContentComponent } from './welcome-content/welcome-content.component';
+import { ButtonsComponent } from './buttons/buttons.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { WelcomeContentComponent } from './welcome-content/welcome-content.compo
     AuthContentComponent,
     WelcomeContentComponent,
     LoginContentComponent,
-    ContentComponent
+    ContentComponent,
+    ButtonsComponent
   ],
   imports: [
     BrowserModule,

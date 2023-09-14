@@ -10,6 +10,8 @@ export class ContentComponent {
 
   constructor(private axiosService: AxiosService) { }
 
+  showComponent: string = "welcome";
+
   onLogin(input: any): void {
     this.axiosService.request(
       "POST",
@@ -31,6 +33,11 @@ export class ContentComponent {
         password: input.password
       }
     );
+  }
+
+
+  OnShowComponent(showComponent: string) {
+    this.showComponent = showComponent;
   }
 
 }
