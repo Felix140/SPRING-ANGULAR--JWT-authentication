@@ -1,7 +1,9 @@
 package com.auth.jwt.backend.services;
 
 import java.nio.CharBuffer;
+import java.util.Optional;
 
+import com.auth.jwt.backend.dto.SignUpDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,26 @@ public class UserService {
 		}
 
 		throw new AppException("Password non valida", HttpStatus.BAD_REQUEST);
+	}
+
+	public UserDto register(SignUpDto signUpDto) {
+		Optional<User> oUser = userRepo.findByLogin(signUpDto.login());
+
+		//? qui ritorno un EXCEPTION se l'UTENTE è già presente nel DB
+		if(oUser.isPresent()) {
+			throw new AppException("Utente già Loggato", HttpStatus.BAD_REQUEST);
+		}
+
+		//? ALTRIMENTI mappa il DTO nell'ENTITY...
+		User user = userMapper.signUpToUser(signUpDto);
+
+		//? ...codifica la PASSWORD...
+		user.setPassword(passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+
+		//? ...e salva l'ENTITY
+		User savedUser = userRepo.save(user);
+
+		return userMapper.toUserDto(savedUser);
 	}
 
 }
