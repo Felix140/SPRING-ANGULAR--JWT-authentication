@@ -1,5 +1,6 @@
 package com.auth.jwt.backend.controllers;
 
+import com.auth.jwt.backend.config.UserAuthProvider;
 import com.auth.jwt.backend.dto.SignUpDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +21,15 @@ import java.net.URI;
 public class AuthController {
 	
 	private final UserService userService;
+	private final UserAuthProvider userAuthProvider;
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto) {
 		//Chiamo il service del USER
 		UserDto user = userService.login(credentialsDto);
+
+		user.setToken(userAuthProvider.createToken(user));
+
 		return ResponseEntity.ok(user);
 	}
 
