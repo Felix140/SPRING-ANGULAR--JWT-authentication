@@ -17,16 +17,16 @@ export class LoginContentComponent {
   login: string = "";
   password: string = "";
 
-  active: string = 'login';
+  active: string = "login";
   firstName: string = "";
   lastName: string = "";
 
   //? Questi metodi saranno utilizzati per switchare da un form all'altro
   onLoginTab(): void {
-    this.active = 'login';
+    this.active = "login";
   }
   onRegisterTab(): void {
-    this.active = 'register';
+    this.active = "register";
   }
 
 
@@ -34,17 +34,17 @@ export class LoginContentComponent {
   //? Il metodo per quando clicco sul SUBMIT LOGIN
   onSubmitLogin(): void {
     this.onSubmitLoginEvent.emit({
-      login: this.login,
-      password: this.password
+      "login": this.login,
+      "password": this.password
     });
   }
   //? Il metodo per quando clicco sul SUBMIT REGISTER
   onSubmitRegister(): void {
     this.onSubmitRegisterEvent.emit({
-      firsName: this.firstName,
-      lastName: this.lastName,
-      login: this.login,
-      password: this.password
+      "firstName": this.firstName,
+      "lastName": this.lastName,
+      "login": this.login,
+      "password": this.password
     });
   }
 
