@@ -18,20 +18,20 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserAuthProvider userAuthProvider;
+    private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+    private final UserAuthProvider userAuthenticationProvider;
 
-    //* Creo la SECURITY FILTER CHAIN
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecure) throws Exception {
-
-        //?Disabilito il CSRF
-        httpSecure.csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
-                .sessionManagement(costumizer -> costumizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //* qui indico di trovarmi in una STATELESS APP
-                .authorizeHttpRequests((requests)->requests.requestMatchers(HttpMethod.POST, "/login", "/register").permitAll() //* rendo pubblico l'endpoint "/login
-                        .anyRequest().authenticated() //* Tutti gli altri endpoint sono protetti da Autenticazione
-                );
-
-        return httpSecure.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthenticationEntryPoint))
+                .addFilterBefore(new JwtAuthFilter(userAuthenticationProvider), BasicAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                        .anyRequest().authenticated())
+        ;
+        return http.build();
     }
 }

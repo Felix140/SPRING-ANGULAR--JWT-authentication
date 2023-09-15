@@ -3,19 +3,15 @@ package com.auth.jwt.backend.exceptions;
 import org.springframework.http.HttpStatus;
 
 public class AppException extends RuntimeException {
-	
-	private final HttpStatus httpStatus;
-	
 
-	public AppException(String message, HttpStatus httpStatus) {
+	private final HttpStatus status;
+
+	public AppException(String message, HttpStatus status) {
 		super(message);
-		this.httpStatus = httpStatus;
-	}
-	
-	
-//	Getter
-	public HttpStatus getHttpStatus() {
-		return httpStatus;
+		this.status = status;
 	}
 
+	public HttpStatus getStatus() {
+		return status;
+	}
 }

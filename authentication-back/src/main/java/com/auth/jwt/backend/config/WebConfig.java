@@ -22,32 +22,32 @@ public class WebConfig {
 	public FilterRegistrationBean corsFilter() {
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		CorsConfiguration config = new CorsConfiguration();
 		
 		 // Questo permete al BE di ricevere gli HEADERS che contengono le info di AUTENTICAZIONE
-		corsConfiguration.setAllowCredentials(true);
-		
-		corsConfiguration.addAllowedOrigin ("http://localhost:4200"); // url FRONTEND
+		config.setAllowCredentials(true);
+
+		config.addAllowedOrigin ("http://localhost:4200"); // url FRONTEND
 		
 		// Qui setto gli HEADERS che il BE dovra accettare
-		corsConfiguration.setAllowedHeaders(Arrays.asList(
+		config.setAllowedHeaders(Arrays.asList(
 				HttpHeaders.AUTHORIZATION,
 				HttpHeaders.CONTENT_TYPE,
 				HttpHeaders.ACCEPT
 				));
 		
 		// Qui setto le REQUEST da accettare		
-		corsConfiguration.setAllowedMethods (Arrays.asList(
+		config.setAllowedMethods (Arrays.asList(
 				HttpMethod.GET.name(),
 				HttpMethod.POST.name(),
 				HttpMethod.PUT.name(),
 				HttpMethod.DELETE.name()));
 		
 		// Qui setto il tempo in cui il CORS config viene accettato: 30 minuti
-		corsConfiguration.setMaxAge(3600L);
+		config.setMaxAge(3600L);
 		
 		// Qui applico la CONFIGURAZIONE a TUTTE LE ROTTE!
-		source.registerCorsConfiguration("/**", corsConfiguration);
+		source.registerCorsConfiguration("/**", config);
 
 		// Posiziono il BEAN corrente alla posizione piu bassa...
 		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
