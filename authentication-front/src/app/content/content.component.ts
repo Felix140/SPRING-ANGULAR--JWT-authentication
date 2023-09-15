@@ -7,37 +7,53 @@ import { AxiosService } from '../service/axios.service';
   styleUrls: ['./content.component.scss']
 })
 export class ContentComponent {
-
-  constructor(private axiosService: AxiosService) { }
-
   showComponent: string = "welcome";
 
-  onLogin(input: any): void {
-    this.axiosService.request(
-      "POST",
-      "/login",
-      {
-        login: input.login,
-        password: input.password
-      }
-    );
-  }
-  onRegister(input: any): void {
-    this.axiosService.request(
-      "POST",
-      "/register",
-      {
-        firstName: input.firstName,
-        lastName: input.lastName,
-        login: input.login,
-        password: input.password
-      }
-    );
-  }
+	constructor(private axiosService: AxiosService) { }
 
+	OnShowComponent(componentToShow: string): void {
+		this.showComponent = componentToShow;
+	}
 
-  OnShowComponent(showComponent: string) {
-    this.showComponent = showComponent;
-  }
+	onLogin(input: any): void {
+		this.axiosService.request(
+			"POST",
+			"/login",
+			{
+				login: input.login,
+				password: input.password
+			}).then(
+				response => {
+					this.axiosService.setAuthToken(response.data.token);
+					this.showComponent = "messages";
+				}).catch(
+					error => {
+						this.axiosService.setAuthToken(null);
+						this.showComponent = "welcome";
+					}
+				);
+
+	}
+
+	onRegister(input: any): void {
+		this.axiosService.request(
+			"POST",
+			"/register",
+			{
+				firstName: input.firstName,
+				lastName: input.lastName,
+				login: input.login,
+				password: input.password
+			}).then(
+				response => {
+					this.axiosService.setAuthToken(response.data.token);
+					this.showComponent = "messages";
+				}).catch(
+					error => {
+						this.axiosService.setAuthToken(null);
+						this.showComponent = "welcome";
+					}
+				);
+	}
 
 }
