@@ -1,6 +1,7 @@
 package com.auth.jwt.backend.config;
 
 import com.auth.jwt.backend.dto.UserDto;
+import com.auth.jwt.backend.services.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -21,45 +22,55 @@ import java.util.Date;
 @Component
 public class UserAuthProvider {
 
-    //? Attenzione a questa annotation, non è di LOMBOK!
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
 
-    //? Servirà per evitare di avere la SECRET-KEY accessibile nella JVM
+    private final UserService userService;
+
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    //* CREO IL TOKEN
-    public String createToken(UserDto userDto) {
-
+    public String createToken(UserDto user) {
         Date now = new Date();
-        Date validazione = new Date(now.getTime() + 3_600_000); //* Valido per UN'ORA
+        Date validity = new Date(now.getTime() + 3600000); // 1 hour
 
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
-                .withIssuer(userDto.getLogin())
+                .withSubject(user.getLogin())
                 .withIssuedAt(now)
-                .withExpiresAt(validazione)
-                .withClaim("firstName", userDto.getFirstName())
-                .withClaim("lastName", userDto.getLastName())
-                .sign(Algorithm.HMAC256(secretKey));
+                .withExpiresAt(validity)
+                .withClaim("firstName", user.getFirstName())
+                .withClaim("lastName", user.getLastName())
+                .sign(algorithm);
     }
 
-    //* VALIDO E DECODIFICO IL TOKEN
     public Authentication validateToken(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        JWTVerifier verifier = JWT.require(algorithm).build();
+        JWTVerifier verifier = JWT.require(algorithm)
+                .build();
 
         DecodedJWT decoded = verifier.verify(token);
 
-        //creo un user DTO
-        UserDto user =  UserDto.builder()
-                .login(decoded.getIssuer())
+        UserDto user = UserDto.builder()
+                .login(decoded.getSubject())
                 .firstName(decoded.getClaim("firstName").asString())
                 .lastName(decoded.getClaim("lastName").asString())
                 .build();
+
+        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+    }
+    public Authentication validateTokenStrongly(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        JWTVerifier verifier = JWT.require(algorithm)
+                .build();
+
+        DecodedJWT decoded = verifier.verify(token);
+
+        UserDto user = userService.findByLogin(decoded.getSubject());
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }

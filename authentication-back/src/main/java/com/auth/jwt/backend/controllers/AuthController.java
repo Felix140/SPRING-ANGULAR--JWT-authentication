@@ -2,6 +2,7 @@ package com.auth.jwt.backend.controllers;
 
 import com.auth.jwt.backend.config.UserAuthProvider;
 import com.auth.jwt.backend.dto.SignUpDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,29 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-@RestController //! Se non si mette questa annotation appare ERRORE 403 nel FE
 @RequiredArgsConstructor
+@RestController
 public class AuthController {
-	
+
 	private final UserService userService;
-	private final UserAuthProvider userAuthProvider;
-	
+	private final UserAuthProvider userAuthenticationProvider;
+
 	@PostMapping("/login")
-	public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto) {
-		//Chiamo il service del USER
-		UserDto user = userService.login(credentialsDto);
-
-		user.setToken(userAuthProvider.createToken(user));
-
-		return ResponseEntity.ok(user);
+	public ResponseEntity<UserDto> login(@RequestBody @Valid CredentialsDto credentialsDto) {
+		UserDto userDto = userService.login(credentialsDto);
+		userDto.setToken(userAuthenticationProvider.createToken(userDto));
+		return ResponseEntity.ok(userDto);
 	}
 
-	//? Qui creo una nuova DTO = SignUpDto
 	@PostMapping("/register")
-	public ResponseEntity<UserDto> register(@RequestBody SignUpDto signUpDto) {
-		//Chiamo il service del USER
-		UserDto user = userService.register(signUpDto);
-		//Ritorno un response di tipo CREATED che contiene l'URL dell'ENTITY + il BODY
-		return ResponseEntity.created(URI.create("/users/" + user.getId())).body(user);
+	public ResponseEntity<UserDto> register(@RequestBody @Valid SignUpDto user) {
+		UserDto createdUser = userService.register(user);
+		createdUser.setToken(userAuthenticationProvider.createToken(createdUser));
+		return ResponseEntity.created(URI.create("/users/" + createdUser.getId())).body(createdUser);
 	}
+
 }

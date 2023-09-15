@@ -17,37 +17,35 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final UserAuthProvider userAuthProvider;
+    private final UserAuthProvider userAuthenticationProvider;
 
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-    //* CHECK autorizzazione HEADER
-    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if(header != null){
+        if (header != null) {
+            String[] authElements = header.split(" ");
 
-        String[] authElements = header.split(" ");
-
-        if(authElements.length == 2 && "Bearer".equals(authElements[0])) {
-
-            try { //* Valida il token, che corrisponderà ad authElements[1]
-
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(userAuthProvider.validateToken(authElements[1]));
-
-            } catch (RuntimeException e) {
-
-                SecurityContextHolder.clearContext();
-                throw e;
-
+            if (authElements.length == 2
+                    && "Bearer".equals(authElements[0])) {
+                try {
+                    if ("GET".equals(request.getMethod())) {
+                        SecurityContextHolder.getContext().setAuthentication(
+                                userAuthenticationProvider.validateToken(authElements[1]));
+                    } else {
+                        SecurityContextHolder.getContext().setAuthentication(
+                                userAuthenticationProvider.validateTokenStrongly(authElements[1]));
+                    }
+                } catch (RuntimeException e) {
+                    SecurityContextHolder.clearContext();
+                    throw e;
+                }
             }
         }
-    }
-    //Alla fine continua con la FILTER CHAIN
-    filterChain.doFilter(request, response);
+
+        filterChain.doFilter(request, response);
     }
 }
