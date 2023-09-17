@@ -7,6 +7,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class LoginContentComponent {
 
+  public selectForm: string = "signIn";
+
   //? creo un campo di output cosi il metodo di SUBMIT sarà dentro il component PADRE
   @Output() onSubmitLoginEvent = new EventEmitter();
   //* Avere nel componente padre(CONTENT) la richiesta di LOGIN data in (OUTPUT)-> mi permetterà di GESTIRE
@@ -22,11 +24,13 @@ export class LoginContentComponent {
   lastName: string = "";
 
   //? Questi metodi saranno utilizzati per switchare da un form all'altro
-  onLoginTab(): void {
+  onLoginTab(select: string): void {
     this.active = "login";
+    this.selectForm = select;
   }
-  onRegisterTab(): void {
+  onRegisterTab(select: string): void {
     this.active = "register";
+    this.selectForm = select;
   }
 
 
